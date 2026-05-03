@@ -11,3 +11,18 @@ export interface Template {
   subject: string;
   fields: TemplateField[];
 }
+
+export interface UserTemplate {
+  id: string;
+  userId: string;
+  name: string;
+  subject: string;
+  html: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+}
