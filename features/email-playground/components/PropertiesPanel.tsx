@@ -429,9 +429,21 @@ export function PropertiesPanel() {
 
   if (!block) {
     return (
-      <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-        <div className="text-2xl mb-2">👆</div>
-        <p className="text-sm text-slate-500">Select a block to edit its properties</p>
+      <div className="flex flex-col h-full">
+        <div className="px-4 pt-4 pb-2">
+          <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest">
+            Properties
+          </p>
+        </div>
+        <div className="flex flex-col items-center justify-center flex-1 px-4 pb-8 text-center">
+          <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center mb-3">
+            <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+            </svg>
+          </div>
+          <p className="text-sm font-medium text-slate-600">No block selected</p>
+          <p className="text-xs text-slate-400 mt-1">Click a block on the canvas to edit its properties</p>
+        </div>
       </div>
     );
   }
@@ -439,10 +451,13 @@ export function PropertiesPanel() {
   const title = block.type.charAt(0).toUpperCase() + block.type.slice(1);
 
   return (
-    <div className="p-3 overflow-y-auto">
-      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 px-1">
-        {title} Properties
-      </p>
+    <div className="p-4 space-y-4 overflow-y-auto">
+      <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+        <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest flex-1">
+          {title}
+        </p>
+        <span className="text-[10px] text-slate-300 font-mono">properties</span>
+      </div>
       {block.type === 'heading' && <HeadingProps block={block} />}
       {block.type === 'paragraph' && <ParagraphProps block={block} />}
       {block.type === 'image' && <ImageProps block={block} />}
@@ -456,3 +471,4 @@ export function PropertiesPanel() {
     </div>
   );
 }
+
