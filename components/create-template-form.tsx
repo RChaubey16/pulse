@@ -4,6 +4,41 @@ import { type FormEvent, useState } from 'react';
 import { ApiError, clientApi } from '@/lib/client-api';
 import type { UserTemplate } from '@/lib/types';
 
+const STARTER_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body style="margin:0;padding:0;background-color:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f1f5f9;padding:48px 16px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:12px;overflow:hidden;">
+          <tr>
+            <td style="background-color:#4f46e5;padding:28px 40px;text-align:center;">
+              <span style="color:#ffffff;font-size:22px;font-weight:700;">Atlas</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:40px 40px 32px;">
+              <h1 style="margin:0 0 20px;font-size:24px;font-weight:700;color:#0f172a;">Hello {{name}}!</h1>
+              <p style="margin:0 0 16px;font-size:16px;line-height:1.6;color:#475569;">{{message}}</p>
+              <p style="margin:0;font-size:15px;color:#64748b;">— The Atlas Team</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:20px 40px;border-top:1px solid #e2e8f0;background-color:#f8fafc;text-align:center;">
+              <p style="margin:0;font-size:12px;color:#94a3b8;">© 2025 Atlas</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
 interface Props {
   onCreated: (template: UserTemplate) => void;
   onCancel: () => void;
@@ -12,7 +47,7 @@ interface Props {
 export default function CreateTemplateForm({ onCreated, onCancel }: Props) {
   const [name, setName] = useState('');
   const [subject, setSubject] = useState('');
-  const [html, setHtml] = useState('');
+  const [html, setHtml] = useState(STARTER_HTML);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
