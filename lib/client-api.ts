@@ -1,4 +1,4 @@
-import type { UserTemplate, Template } from './types';
+import type { Template } from './types';
 
 export const GATEWAY = process.env.NEXT_PUBLIC_GATEWAY_URL ?? 'http://localhost:3000';
 
@@ -47,32 +47,5 @@ async function apiFetch<T>(
 export const clientApi = {
   templates: {
     list: (): Promise<Template[]> => apiFetch('/templates'),
-  },
-
-  userTemplates: {
-    list: (): Promise<UserTemplate[]> => apiFetch('/user-templates'),
-    create: (data: {
-      name: string;
-      subject: string;
-      html: string;
-    }): Promise<UserTemplate> =>
-      apiFetch('/user-templates', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-    delete: (id: string): Promise<void> =>
-      apiFetch(`/user-templates/${id}`, { method: 'DELETE' }),
-  },
-
-  notify: {
-    send: (data: {
-      templateId: string;
-      to: string[];
-      templateData: Record<string, string>;
-    }): Promise<{ sent: number }> =>
-      apiFetch('/notify/send', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
   },
 };

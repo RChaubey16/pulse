@@ -24,7 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${GATEWAY}/user-templates`, { credentials: 'include', cache: 'no-store' })
+    fetch(`${GATEWAY}/email-templates`, { credentials: 'include', cache: 'no-store' })
       .then((r) => setIsAuthenticated(r.ok))
       .catch(() => setIsAuthenticated(false))
       .finally(() => setIsLoading(false));
