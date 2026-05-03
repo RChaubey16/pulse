@@ -8,13 +8,12 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { clearToken, getToken, setToken } from '@/lib/auth';
-import { ApiError, clientApi } from '@/lib/client-api';
+
+const GATEWAY = process.env.NEXT_PUBLIC_GATEWAY_URL ?? 'http://localhost:3000';
 
 interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -25,23 +24,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsAuthenticated(!!getToken());
-    setIsLoading(false);
-  }, []);
-
-  const login = useCallback(async (email: string, password: string) => {
-    const { accessToken } = await clientApi.auth.login(email, password);
-    setToken(accessToken);
-    setIsAuthenticated(true);
+    fetch(`${GATEWAY}/user-templates`, { credentials: 'include', cache: 'no-store' })
+      .then((r) => setIsAuthenticated(r.ok))
+      .catch(() => setIsAuthenticated(false))
+      .finally(() => setIsLoading(false));
   }, []);
 
   const logout = useCallback(() => {
-    clearToken();
-    setIsAuthenticated(false);
+    void fetch(`${GATEWAY}/auth/logout`, { method: 'POST', credentials: 'include' }).finally(() => {
+      setIsAuthenticated(false);
+      window.location.replace('/templates');
+    });
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, logout }}>
       {children}
     </AuthContext.Provider>
   );
@@ -52,5 +49,3 @@ export function useAuth(): AuthState {
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
 }
-
-export { ApiError };

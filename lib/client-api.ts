@@ -1,5 +1,4 @@
-import { getToken } from './auth';
-import type { UserTemplate, LoginResponse, Template } from './types';
+import type { UserTemplate, Template } from './types';
 
 export const GATEWAY = process.env.NEXT_PUBLIC_GATEWAY_URL ?? 'http://localhost:3000';
 
@@ -17,15 +16,14 @@ async function apiFetch<T>(
   path: string,
   init?: Omit<RequestInit, 'headers'> & { headers?: Record<string, string> },
 ): Promise<T> {
-  const token = getToken();
   const { headers: extraHeaders, ...rest } = init ?? {};
 
   const res = await fetch(`${GATEWAY}${path}`, {
     ...rest,
+    credentials: 'include',
     cache: 'no-store',
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...extraHeaders,
     },
   });
@@ -47,14 +45,6 @@ async function apiFetch<T>(
 }
 
 export const clientApi = {
-  auth: {
-    login: (email: string, password: string): Promise<LoginResponse> =>
-      apiFetch('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      }),
-  },
-
   templates: {
     list: (): Promise<Template[]> => apiFetch('/templates'),
   },
